@@ -31,7 +31,7 @@ export function HeroSection() {
                                 alt=""
                                 width={40}
                                 height={40}
-                                className="opacity-60"
+                                className="opacity-100"
                             />
                         </div>
                         {/* WhatsApp - upper left */}
@@ -41,7 +41,7 @@ export function HeroSection() {
                                 alt=""
                                 width={40}
                                 height={40}
-                                className="opacity-60"
+                                className="opacity-100"
                             />
                         </div>
                         {/* Asana - left middle */}
@@ -51,7 +51,7 @@ export function HeroSection() {
                                 alt=""
                                 width={40}
                                 height={40}
-                                className="opacity-60"
+                                className="opacity-100"
                             />
                         </div>
                         {/* Confluence - lower left */}
@@ -61,7 +61,7 @@ export function HeroSection() {
                                 alt=""
                                 width={40}
                                 height={40}
-                                className="opacity-60"
+                                className="opacity-100"
                             />
                         </div>
                         {/* Google Calendar - top right */}
@@ -71,7 +71,7 @@ export function HeroSection() {
                                 alt=""
                                 width={40}
                                 height={40}
-                                className="opacity-60"
+                                className="opacity-100"
                             />
                         </div>
                         {/* Salesforce - middle right */}
@@ -81,7 +81,7 @@ export function HeroSection() {
                                 alt=""
                                 width={40}
                                 height={40}
-                                className="opacity-60"
+                                className="opacity-100"
                             />
                         </div>
                         {/* Slack - lower middle right */}
@@ -91,7 +91,7 @@ export function HeroSection() {
                                 alt=""
                                 width={40}
                                 height={40}
-                                className="opacity-60"
+                                className="opacity-100"
                             />
                         </div>
                         {/* Gmail - bottom right */}
@@ -101,7 +101,7 @@ export function HeroSection() {
                                 alt=""
                                 width={40}
                                 height={40}
-                                className="opacity-60"
+                                className="opacity-100"
                             />
                         </div>
                     </div>

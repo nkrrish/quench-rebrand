@@ -1,5 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
+import { fetchThemes, saveThemeAPI, deleteThemeAPI } from './themeAPI';
 
 export interface SavedTheme {
     id: string;
@@ -32,8 +33,8 @@ export interface ThemeState {
     setGradientDirection: (direction: string) => void;
     setRadius: (radius: number) => void;
     setMode: (mode: 'light' | 'dark') => void;
-    saveTheme: (name: string) => void;
-    deleteTheme: (id: string) => void;
+    saveTheme: (name: string) => Promise<void>;
+    deleteTheme: (id: string) => Promise<void>;
     loadTheme: (theme: SavedTheme) => void;
 }
 
@@ -57,8 +58,8 @@ export const useThemeStore = create<ThemeState>()(
             setGradientDirection: (gradientDirection) => set({ gradientDirection }),
             setRadius: (radius) => set({ radius }),
             setMode: (mode) => set({ mode }),
-            saveTheme: (name) => {
-                const { fontHeading, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, mode, savedThemes } = get();
+            saveTheme: async (name) => {
+                const { fontHeading, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, savedThemes } = get();
                 const newTheme: SavedTheme = {
                     id: crypto.randomUUID(),
                     name,
@@ -69,12 +70,17 @@ export const useThemeStore = create<ThemeState>()(
                     gradientColors,
                     gradientDirection,
                     radius,
-                    mode,
+                    mode: 'light', // Default mode for saved themes (not used as global setting)
                 };
-                set({ savedThemes: [...savedThemes, newTheme] });
+                const updated = [...savedThemes, newTheme];
+                set({ savedThemes: updated });
+                // Persist to backend via API
+                await saveThemeAPI(newTheme);
             },
-            deleteTheme: (id) => {
-                set({ savedThemes: get().savedThemes.filter((t) => t.id !== id) });
+            deleteTheme: async (id) => {
+                const filtered = get().savedThemes.filter((t) => t.id !== id);
+                set({ savedThemes: filtered });
+                await deleteThemeAPI(id);
             },
             loadTheme: (theme) => {
                 set({
@@ -85,7 +91,7 @@ export const useThemeStore = create<ThemeState>()(
                     gradientColors: theme.gradientColors || ['#3b82f6', '#8b5cf6'],
                     gradientDirection: theme.gradientDirection || 'to right',
                     radius: theme.radius,
-                    mode: theme.mode,
+                    // Don't change mode when loading theme - it's a global setting
                 });
             },
         }),
@@ -94,3 +100,9 @@ export const useThemeStore = create<ThemeState>()(
         }
     )
 );
+
+// Load all themes from file on initialization (optional helper)
+export const loadAllThemes = async () => {
+    const themes = await fetchThemes();
+    useThemeStore.setState({ savedThemes: themes });
+};

@@ -4,20 +4,36 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useThemeStore } from "@/lib/store";
 
+// Helper function to convert hex to rgba
+function hexToRgba(hex: string, opacity: number): string {
+    const result = /^#?([a-f\d]{2})([a-f\d]{2})([a-f\d]{2})$/i.exec(hex);
+    if (!result) return `rgba(0, 0, 0, ${opacity})`;
+    const r = parseInt(result[1], 16);
+    const g = parseInt(result[2], 16);
+    const b = parseInt(result[3], 16);
+    return `rgba(${r}, ${g}, ${b}, ${opacity})`;
+}
+
 export function CTASection() {
     const { isGradient, gradientColors, gradientDirection, primaryColor } = useThemeStore();
 
     // Get the primary color or first gradient color for background
     const bgColor = isGradient ? gradientColors[0] : primaryColor;
+    
+    // Create gradient mask: transparent at top (0% opacity) to primary color with 5% opacity at bottom
+    const maskGradient = isGradient 
+        ? `linear-gradient(to bottom, transparent 0%, ${hexToRgba(gradientColors[0], 0.05)} 100%)`
+        : `linear-gradient(to bottom, transparent 0%, ${hexToRgba(primaryColor, 0.05)} 100%)`;
 
     return (
         <section className="py-24 relative overflow-hidden">
+            {/* Base background matching the previous section */}
+            <div className="absolute inset-0 bg-muted/30"></div>
+            {/* Gradient mask layer on top */}
             <div
-                className="absolute inset-0 opacity-5"
-                style={isGradient ? {
-                    background: `linear-gradient(${gradientDirection}, ${gradientColors.join(", ")})`
-                } : {
-                    backgroundColor: bgColor
+                className="absolute inset-0"
+                style={{
+                    background: maskGradient
                 }}
             ></div>
 

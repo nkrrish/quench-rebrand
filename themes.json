@@ -1,0 +1,77 @@
+[
+  {
+    "id": "8817ca0b-d475-4532-b48a-24746fb40877",
+    "name": "Pink Orange",
+    "fontHeading": "Stack Sans Headline",
+    "fontBody": "SF Pro Display",
+    "primaryColor": "#FF3E8B",
+    "isGradient": true,
+    "gradientColors": [
+      "#FF7A32",
+      "#FF3E8B"
+    ],
+    "gradientDirection": "to bottom",
+    "radius": 1.9,
+    "mode": "dark"
+  },
+  {
+    "id": "9c703760-8deb-4f45-ae15-e0b090107e9f",
+    "name": "Orange",
+    "fontHeading": "Stack Sans Headline",
+    "fontBody": "SF Pro Display",
+    "primaryColor": "#FE4B00",
+    "isGradient": false,
+    "gradientColors": [
+      "#3b82f6",
+      "#8b5cf6"
+    ],
+    "gradientDirection": "to right",
+    "radius": 1.9,
+    "mode": "dark"
+  },
+  {
+    "id": "f0a68c28-8426-4fb1-b630-d4c823aab334",
+    "name": "Mint Green",
+    "fontHeading": "Stack Sans Headline",
+    "fontBody": "SF Pro Display",
+    "primaryColor": "#C7FF95",
+    "isGradient": false,
+    "gradientColors": [
+      "#3b82f6",
+      "#8b5cf6"
+    ],
+    "gradientDirection": "to right",
+    "radius": 1.9,
+    "mode": "dark"
+  },
+  {
+    "id": "d620936e-7f41-40ef-80cb-3179b1759a07",
+    "name": "Green",
+    "fontHeading": "Stack Sans Headline",
+    "fontBody": "SF Pro Display",
+    "primaryColor": "#82E080",
+    "isGradient": false,
+    "gradientColors": [
+      "#3b82f6",
+      "#8b5cf6"
+    ],
+    "gradientDirection": "to right",
+    "radius": 1.9,
+    "mode": "dark"
+  },
+  {
+    "id": "f2a26f5d-3285-4cf4-91cb-2dbe3ac50cda",
+    "name": "Mint (Light)",
+    "fontHeading": "Stack Sans Headline",
+    "fontBody": "SF Pro Display",
+    "primaryColor": "#A9D983",
+    "isGradient": false,
+    "gradientColors": [
+      "#3b82f6",
+      "#8b5cf6"
+    ],
+    "gradientDirection": "to right",
+    "radius": 1.9,
+    "mode": "light"
+  }
+]

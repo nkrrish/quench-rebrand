@@ -128,8 +128,20 @@ export function ThemeBuilder() {
                 <PopoverContent className="w-96 p-0 mr-4 mb-2" side="left" align="end">
                     <Card className="border-0 shadow-none max-h-[80vh] overflow-y-auto">
                         <CardHeader className="pb-3">
-                            <CardTitle>Theme Builder</CardTitle>
-                            <CardDescription>Customize your brand look.</CardDescription>
+                            <div className="flex items-center justify-between">
+                                <div>
+                                    <CardTitle>Theme Builder</CardTitle>
+                                    <CardDescription>Customize your brand look.</CardDescription>
+                                </div>
+                                <div className="flex items-center space-x-2">
+                                    <Sun className={cn("h-4 w-4", mode === "light" ? "text-foreground" : "text-muted-foreground")} />
+                                    <Switch
+                                        checked={mode === "dark"}
+                                        onCheckedChange={(checked) => setMode(checked ? "dark" : "light")}
+                                    />
+                                    <Moon className={cn("h-4 w-4", mode === "dark" ? "text-foreground" : "text-muted-foreground")} />
+                                </div>
+                            </div>
                         </CardHeader>
                         <CardContent>
                             <Tabs defaultValue="customize">
@@ -278,7 +290,7 @@ export function ThemeBuilder() {
                                         )}
                                     </div>
 
-                                    {/* Radius & Mode */}
+                                    {/* Radius */}
                                     <div className="space-y-4">
                                         <h4 className="text-sm font-medium leading-none">Appearance</h4>
                                         <div className="grid grid-cols-1 gap-4">
@@ -291,27 +303,6 @@ export function ThemeBuilder() {
                                                     step={0.1}
                                                     onValueChange={([val]) => setRadius(val)}
                                                 />
-                                            </div>
-                                            <div className="space-y-3 flex flex-col items-start">
-                                                <Label className="text-xs mb-2">Theme Mode</Label>
-                                                <div className="flex items-center space-x-2 bg-muted p-1 rounded-lg w-full">
-                                                    <Button
-                                                        variant={mode === "light" ? "default" : "ghost"}
-                                                        size="sm"
-                                                        onClick={() => setMode("light")}
-                                                        className="flex-1 h-7 px-2"
-                                                    >
-                                                        <Sun className="h-4 w-4 mr-1" /> Light
-                                                    </Button>
-                                                    <Button
-                                                        variant={mode === "dark" ? "default" : "ghost"}
-                                                        size="sm"
-                                                        onClick={() => setMode("dark")}
-                                                        className="flex-1 h-7 px-2"
-                                                    >
-                                                        <Moon className="h-4 w-4 mr-1" /> Dark
-                                                    </Button>
-                                                </div>
                                             </div>
                                         </div>
                                     </div>

@@ -1,7 +1,7 @@
 "use client";
 
 import * as React from "react";
-import { useThemeStore } from "@/lib/store";
+import { useThemeStore, loadAllThemes } from "@/lib/store";
 
 export function ThemeProviderWrapper({
     children,
@@ -53,6 +53,11 @@ export function ThemeProviderWrapper({
         root.style.setProperty("--font-body-dynamic", bodyVar);
 
     }, [fontHeading, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, mode]);
+
+    // Load themes once on component mount
+    React.useEffect(() => {
+        loadAllThemes();
+    }, []);
 
     return <>{children}</>;
 }
