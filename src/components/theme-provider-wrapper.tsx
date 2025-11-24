@@ -16,7 +16,8 @@ export function ThemeProviderWrapper({
         gradientColors,
         gradientDirection,
         radius,
-        mode
+        mode,
+        accentColor
     } = useThemeStore();
 
     React.useEffect(() => {
@@ -52,7 +53,14 @@ export function ThemeProviderWrapper({
         root.style.setProperty("--font-heading-dynamic", headingVar);
         root.style.setProperty("--font-body-dynamic", bodyVar);
 
-    }, [fontHeading, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, mode]);
+        // Apply Accent Color if set
+        if (accentColor) {
+            root.style.setProperty("--accent", accentColor);
+        } else {
+            root.style.removeProperty("--accent");
+        }
+
+    }, [fontHeading, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, mode, accentColor]);
 
     // Load themes once on component mount
     React.useEffect(() => {

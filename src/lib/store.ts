@@ -13,6 +13,7 @@ export interface SavedTheme {
     gradientDirection: string;
     radius: number;
     mode: 'light' | 'dark';
+    accentColor?: string | null;
 }
 
 export interface ThemeState {
@@ -24,6 +25,7 @@ export interface ThemeState {
     gradientDirection: string;
     radius: number;
     mode: 'light' | 'dark';
+    accentColor: string | null;
     savedThemes: SavedTheme[];
     setFontHeading: (font: string) => void;
     setFontBody: (font: string) => void;
@@ -33,6 +35,7 @@ export interface ThemeState {
     setGradientDirection: (direction: string) => void;
     setRadius: (radius: number) => void;
     setMode: (mode: 'light' | 'dark') => void;
+    setAccentColor: (color: string | null) => void;
     saveTheme: (name: string) => Promise<void>;
     deleteTheme: (id: string) => Promise<void>;
     loadTheme: (theme: SavedTheme) => void;
@@ -49,6 +52,7 @@ export const useThemeStore = create<ThemeState>()(
             gradientDirection: 'to right',
             radius: 0.5,
             mode: 'light',
+            accentColor: null,
             savedThemes: [],
             setFontHeading: (font) => set({ fontHeading: font }),
             setFontBody: (font) => set({ fontBody: font }),
@@ -58,8 +62,9 @@ export const useThemeStore = create<ThemeState>()(
             setGradientDirection: (gradientDirection) => set({ gradientDirection }),
             setRadius: (radius) => set({ radius }),
             setMode: (mode) => set({ mode }),
+            setAccentColor: (color) => set({ accentColor: color }),
             saveTheme: async (name) => {
-                const { fontHeading, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, savedThemes } = get();
+                const { fontHeading, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, accentColor, savedThemes } = get();
                 const newTheme: SavedTheme = {
                     id: crypto.randomUUID(),
                     name,
@@ -71,6 +76,7 @@ export const useThemeStore = create<ThemeState>()(
                     gradientDirection,
                     radius,
                     mode: 'light', // Default mode for saved themes (not used as global setting)
+                    accentColor: accentColor || null,
                 };
                 const updated = [...savedThemes, newTheme];
                 set({ savedThemes: updated });
@@ -91,6 +97,7 @@ export const useThemeStore = create<ThemeState>()(
                     gradientColors: theme.gradientColors || ['#3b82f6', '#8b5cf6'],
                     gradientDirection: theme.gradientDirection || 'to right',
                     radius: theme.radius,
+                    accentColor: theme.accentColor || null,
                     // Don't change mode when loading theme - it's a global setting
                 });
             },

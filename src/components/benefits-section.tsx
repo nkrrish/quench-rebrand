@@ -5,7 +5,7 @@ import { Sparkles, Clock, Shield, Zap } from "lucide-react";
 import { useThemeStore } from "@/lib/store";
 
 export function BenefitsSection() {
-    const { isGradient, gradientColors, gradientDirection } = useThemeStore();
+    const { isGradient, gradientColors, gradientDirection, accentColor } = useThemeStore();
 
     const benefits = [
         {
@@ -54,10 +54,29 @@ export function BenefitsSection() {
                     {benefits.map((benefit, index) => {
                         const Icon = benefit.icon;
                         return (
-                            <Card key={index} className="bg-background border hover:shadow-lg transition-shadow">
+                            <Card 
+                                key={index} 
+                                className="bg-background border hover:shadow-lg hover:scale-[1.02] transition-all duration-300 animate-in fade-in slide-in-from-bottom-8 duration-700"
+                                style={{
+                                    animationDelay: `${index * 100}ms`,
+                                    ...(accentColor ? {
+                                        borderColor: `${accentColor}20`
+                                    } : {})
+                                }}
+                            >
                                 <CardHeader>
-                                    <div className="h-12 w-12 rounded-lg bg-muted flex items-center justify-center mb-4">
-                                        <Icon className="h-6 w-6 text-foreground" />
+                                    <div 
+                                        className={`h-12 w-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 ${!accentColor && 'bg-muted'}`}
+                                        style={accentColor ? {
+                                            backgroundColor: `${accentColor}15`
+                                        } : undefined}
+                                    >
+                                        <Icon 
+                                            className="h-6 w-6 group-hover:rotate-12 transition-transform duration-300" 
+                                            style={accentColor ? {
+                                                color: accentColor
+                                            } : undefined}
+                                        />
                                     </div>
                                     <CardTitle className="font-heading text-xl">{benefit.title}</CardTitle>
                                 </CardHeader>

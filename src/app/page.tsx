@@ -1,5 +1,6 @@
 import { SiteHeader } from "@/components/site-header";
 import { HeroSection } from "@/components/hero-section";
+import { LogoScroller } from "@/components/logo-scroller";
 import { StatsSection } from "@/components/stats-section";
 import { FeatureSection } from "@/components/feature-section";
 import { HowItWorksSection } from "@/components/how-it-works-section";

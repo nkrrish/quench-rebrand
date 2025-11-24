@@ -1,6 +1,6 @@
 [
   {
-    "id": "8817ca0b-d475-4532-b48a-24746fb40877",
+    "id": "94536ea6-c185-42f5-9d58-8c5781545e48",
     "name": "Pink Orange",
     "fontHeading": "Stack Sans Headline",
     "fontBody": "SF Pro Display",
@@ -11,11 +11,12 @@
       "#FF3E8B"
     ],
     "gradientDirection": "to bottom",
-    "radius": 1.9,
-    "mode": "dark"
+    "radius": 1.8,
+    "mode": "light",
+    "accentColor": "#00b9a6"
   },
   {
-    "id": "9c703760-8deb-4f45-ae15-e0b090107e9f",
+    "id": "c1a8f8c5-dcea-4b8e-bdd9-2a211a1224ff",
     "name": "Orange",
     "fontHeading": "Stack Sans Headline",
     "fontBody": "SF Pro Display",
@@ -27,41 +28,28 @@
     ],
     "gradientDirection": "to right",
     "radius": 1.9,
-    "mode": "dark"
+    "mode": "light",
+    "accentColor": "#5fe5ff"
   },
   {
-    "id": "f0a68c28-8426-4fb1-b630-d4c823aab334",
+    "id": "7c910b1c-4d2a-4ba3-b736-95dd3488bff5",
+    "name": "Green + Teal",
+    "fontHeading": "Stack Sans Headline",
+    "fontBody": "SF Pro Display",
+    "primaryColor": "#A9D983",
+    "isGradient": true,
+    "gradientColors": [
+      "#82E080",
+      "#55CBD3"
+    ],
+    "gradientDirection": "to top right",
+    "radius": 1.9,
+    "mode": "light",
+    "accentColor": "#55cbd3"
+  },
+  {
+    "id": "8597e8f2-a756-440e-97f1-fbdbd7a01b36",
     "name": "Mint Green",
-    "fontHeading": "Stack Sans Headline",
-    "fontBody": "SF Pro Display",
-    "primaryColor": "#C7FF95",
-    "isGradient": false,
-    "gradientColors": [
-      "#3b82f6",
-      "#8b5cf6"
-    ],
-    "gradientDirection": "to right",
-    "radius": 1.9,
-    "mode": "dark"
-  },
-  {
-    "id": "d620936e-7f41-40ef-80cb-3179b1759a07",
-    "name": "Green",
-    "fontHeading": "Stack Sans Headline",
-    "fontBody": "SF Pro Display",
-    "primaryColor": "#82E080",
-    "isGradient": false,
-    "gradientColors": [
-      "#3b82f6",
-      "#8b5cf6"
-    ],
-    "gradientDirection": "to right",
-    "radius": 1.9,
-    "mode": "dark"
-  },
-  {
-    "id": "f2a26f5d-3285-4cf4-91cb-2dbe3ac50cda",
-    "name": "Mint (Light)",
     "fontHeading": "Stack Sans Headline",
     "fontBody": "SF Pro Display",
     "primaryColor": "#A9D983",
@@ -72,6 +60,23 @@
     ],
     "gradientDirection": "to right",
     "radius": 1.9,
-    "mode": "light"
+    "mode": "light",
+    "accentColor": "#55cbd3"
+  },
+  {
+    "id": "690ed6c9-d3b0-4eb0-89ec-36190e40e0db",
+    "name": "Pink Orange (Alt Font)",
+    "fontHeading": "Stack Sans Notch",
+    "fontBody": "SF Pro Display",
+    "primaryColor": "#FF3E8B",
+    "isGradient": true,
+    "gradientColors": [
+      "#FF7A32",
+      "#FF3E8B"
+    ],
+    "gradientDirection": "to bottom",
+    "radius": 1.8,
+    "mode": "light",
+    "accentColor": null
   }
 ]

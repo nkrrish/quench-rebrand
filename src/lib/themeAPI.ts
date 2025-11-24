@@ -14,6 +14,7 @@ export interface SavedTheme {
     gradientDirection: string;
     radius: number;
     mode: "light" | "dark";
+    accentColor?: string | null;
 }
 
 /** Fetch all stored themes from the server */

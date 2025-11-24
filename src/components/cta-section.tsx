@@ -15,13 +15,16 @@ function hexToRgba(hex: string, opacity: number): string {
 }
 
 export function CTASection() {
-    const { isGradient, gradientColors, gradientDirection, primaryColor } = useThemeStore();
+    const { isGradient, gradientColors, gradientDirection, primaryColor, accentColor } = useThemeStore();
 
     // Get the primary color or first gradient color for background
     const bgColor = isGradient ? gradientColors[0] : primaryColor;
     
     // Create gradient mask: transparent at top (0% opacity) to primary color with 5% opacity at bottom
-    const maskGradient = isGradient 
+    // If accent color is available, blend it in
+    const maskGradient = accentColor && !isGradient
+        ? `linear-gradient(to bottom, transparent 0%, ${hexToRgba(primaryColor, 0.03)} 50%, ${hexToRgba(accentColor, 0.05)} 100%)`
+        : isGradient 
         ? `linear-gradient(to bottom, transparent 0%, ${hexToRgba(gradientColors[0], 0.05)} 100%)`
         : `linear-gradient(to bottom, transparent 0%, ${hexToRgba(primaryColor, 0.05)} 100%)`;
 
@@ -54,10 +57,10 @@ export function CTASection() {
                         Join hundreds of teams already using ollo to streamline their operations.
                     </p>
                     <div className="flex flex-col sm:flex-row gap-4 justify-center">
-                        <Button size="lg" className="h-12 px-8 text-base">
-                            Get started free <ArrowRight className="ml-2 h-4 w-4" />
+                        <Button size="lg" className="h-12 px-8 text-base hover:scale-105 active:scale-95 transition-transform duration-200 group">
+                            Get started free <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
                         </Button>
-                        <Button size="lg" variant="outline" className="h-12 px-8 text-base">
+                        <Button size="lg" variant="outline" className="h-12 px-8 text-base hover:scale-105 active:scale-95 transition-transform duration-200">
                             Schedule a demo
                         </Button>
                     </div>

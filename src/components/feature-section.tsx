@@ -5,7 +5,7 @@ import { AlertTriangle, CheckCircle2, ShieldCheck, Zap } from "lucide-react";
 import { useThemeStore } from "@/lib/store";
 
 export function FeatureSection() {
-    const { isGradient, gradientColors, gradientDirection } = useThemeStore();
+    const { isGradient, gradientColors, gradientDirection, accentColor } = useThemeStore();
 
     return (
         <section className="py-24 bg-muted/30">
@@ -20,9 +20,9 @@ export function FeatureSection() {
                 </div>
 
                 <div className="grid md:grid-cols-3 gap-8">
-                    <Card className="bg-background border shadow-lg hover:shadow-xl transition-shadow">
+                    <Card className="bg-background border shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 animate-in fade-in slide-in-from-bottom-8 duration-700">
                         <CardHeader>
-                            <div className="h-12 w-12 rounded-lg bg-red-100 dark:bg-red-900/20 flex items-center justify-center mb-4">
+                            <div className="h-12 w-12 rounded-lg bg-red-100 dark:bg-red-900/20 flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300">
                                 <AlertTriangle className="h-6 w-6 text-red-600 dark:text-red-400" />
                             </div>
                             <CardTitle className="font-heading">The Problem</CardTitle>
@@ -45,10 +45,10 @@ export function FeatureSection() {
                         </CardContent>
                     </Card>
 
-                    <div className="flex items-center justify-center md:col-span-1">
+                    <div className="flex items-center justify-center md:col-span-1 animate-in fade-in slide-in-from-bottom-8 duration-700 delay-200">
                         <div className="text-center space-y-4">
-                            <div className="inline-flex items-center justify-center p-4 rounded-full bg-muted mb-2">
-                                <Zap className="h-8 w-8 text-foreground" />
+                            <div className="inline-flex items-center justify-center p-4 rounded-full bg-muted mb-2 hover:scale-110 transition-transform duration-300 group">
+                                <Zap className="h-8 w-8 text-foreground group-hover:rotate-12 transition-transform duration-300" />
                             </div>
                             <h3 className="text-xl font-bold font-heading">The ollo Solution</h3>
                             <p className="text-muted-foreground">
@@ -60,11 +60,14 @@ export function FeatureSection() {
                     </div>
 
                     <Card
-                        className="bg-background border shadow-lg hover:shadow-xl transition-shadow relative overflow-hidden"
+                        className="bg-background border shadow-lg hover:shadow-xl hover:scale-[1.02] transition-all duration-300 relative overflow-hidden animate-in fade-in slide-in-from-bottom-8 duration-700 delay-400"
                     >
                         <div
-                            className={`absolute top-0 right-0 p-3 text-xs font-bold rounded-bl-xl ${!isGradient && 'bg-primary text-primary-foreground'}`}
-                            style={isGradient ? {
+                            className={`absolute top-0 right-0 p-3 text-xs font-bold rounded-bl-xl ${!isGradient && !accentColor && 'bg-primary text-primary-foreground'}`}
+                            style={accentColor ? {
+                                backgroundColor: accentColor,
+                                color: 'white'
+                            } : isGradient ? {
                                 background: `linear-gradient(${gradientDirection}, ${gradientColors.join(", ")})`,
                                 color: 'white'
                             } : undefined}
@@ -73,7 +76,7 @@ export function FeatureSection() {
                         </div>
                         <CardHeader>
                             <div
-                                className={`h-12 w-12 rounded-lg flex items-center justify-center mb-4 ${!isGradient && 'bg-primary/10'}`}
+                                className={`h-12 w-12 rounded-lg flex items-center justify-center mb-4 group-hover:scale-110 transition-transform duration-300 ${!isGradient && 'bg-primary/10'}`}
                                 style={isGradient ? {
                                     background: `linear-gradient(${gradientDirection}, ${gradientColors.map(c => `${c}1A`).join(", ")})`
                                 } : undefined}

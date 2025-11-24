@@ -4,20 +4,43 @@ import { Button } from "@/components/ui/button";
 import { ArrowRight } from "lucide-react";
 import { useThemeStore } from "@/lib/store";
 import Image from "next/image";
+import { LogoScroller } from "@/components/logo-scroller";
 
 export function HeroSection() {
-    const { isGradient, gradientColors, gradientDirection, primaryColor } = useThemeStore();
+    const { isGradient, gradientColors, gradientDirection, primaryColor, accentColor: storeAccentColor } = useThemeStore();
 
     // Get the primary color or first gradient color for background spots
     const accentColor = isGradient ? gradientColors[0] : primaryColor;
-    const secondaryColor = isGradient && gradientColors.length > 1 ? gradientColors[1] : primaryColor;
+    // Use store accentColor if available, otherwise fall back to gradient second color or primary
+    const secondaryColor = storeAccentColor || (isGradient && gradientColors.length > 1 ? gradientColors[1] : primaryColor);
 
     return (
         <section className="relative pt-20 pb-0 overflow-hidden">
             <div className="container mx-auto relative z-10 flex flex-col items-center text-center">
-                <div className="inline-flex items-center rounded-full border px-3 py-1 text-sm font-medium bg-muted mb-8">
-                    <span className="flex h-2 w-2 rounded-full bg-green-500 mr-2"></span>
-                    New: Integration with Notion & Slack
+                <div className="inline-flex items-center gap-2 rounded-full border px-3 py-1 text-sm font-medium bg-muted mb-8 animate-in fade-in slide-in-from-bottom-4 duration-700">
+                    <span className="flex h-2 w-2 rounded-full bg-green-500 mr-1 animate-pulse"></span>
+                    <span>New: Integration with</span>
+                    <span className="inline-flex items-center gap-1 hover:scale-105 transition-transform duration-200">
+                        <Image
+                            src="/notion-logo.png"
+                            alt="Notion"
+                            width={16}
+                            height={16}
+                            className="object-contain"
+                        />
+                        <span>Notion</span>
+                    </span>
+                    <span>&</span>
+                    <span className="inline-flex items-center gap-1 hover:scale-105 transition-transform duration-200">
+                        <Image
+                            src="/slack-logo.png"
+                            alt="Slack"
+                            width={16}
+                            height={16}
+                            className="object-contain"
+                        />
+                        <span>Slack</span>
+                    </span>
                 </div>
 
                 {/* Text content with floating icons */}
@@ -25,7 +48,7 @@ export function HeroSection() {
                     {/* Floating Icons - only around text */}
                     <div className="absolute inset-0 pointer-events-none z-20">
                         {/* Notion - top left */}
-                        <div className="absolute -top-4 -left-24 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center">
+                        <div className="absolute -top-4 -left-24 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center hover:scale-110 transition-transform duration-300 animate-in fade-in slide-in-from-top-4 duration-1000 delay-100">
                             <Image
                                 src="/icon-5.png"
                                 alt=""
@@ -35,7 +58,7 @@ export function HeroSection() {
                             />
                         </div>
                         {/* WhatsApp - upper left */}
-                        <div className="absolute top-[15%] -left-28 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center">
+                        <div className="absolute top-[15%] -left-28 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center hover:scale-110 transition-transform duration-300 animate-in fade-in slide-in-from-left-4 duration-1000 delay-200">
                             <Image
                                 src="/icon-8.png"
                                 alt=""
@@ -45,7 +68,7 @@ export function HeroSection() {
                             />
                         </div>
                         {/* Asana - left middle */}
-                        <div className="absolute top-[45%] -left-32 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center">
+                        <div className="absolute top-[45%] -left-32 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center hover:scale-110 transition-transform duration-300 animate-in fade-in slide-in-from-left-4 duration-1000 delay-300">
                             <Image
                                 src="/icon-3.png"
                                 alt=""
@@ -55,7 +78,7 @@ export function HeroSection() {
                             />
                         </div>
                         {/* Confluence - lower left */}
-                        <div className="absolute bottom-[10%] -left-28 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center">
+                        <div className="absolute bottom-[10%] -left-28 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center hover:scale-110 transition-transform duration-300 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-400">
                             <Image
                                 src="/icon-2.png"
                                 alt=""
@@ -65,7 +88,7 @@ export function HeroSection() {
                             />
                         </div>
                         {/* Google Calendar - top right */}
-                        <div className="absolute -top-4 -right-24 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center">
+                        <div className="absolute -top-4 -right-24 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center hover:scale-110 transition-transform duration-300 animate-in fade-in slide-in-from-top-4 duration-1000 delay-100">
                             <Image
                                 src="/icon-1.png"
                                 alt=""
@@ -75,7 +98,7 @@ export function HeroSection() {
                             />
                         </div>
                         {/* Salesforce - middle right */}
-                        <div className="absolute top-[25%] -right-28 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center">
+                        <div className="absolute top-[25%] -right-28 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center hover:scale-110 transition-transform duration-300 animate-in fade-in slide-in-from-right-4 duration-1000 delay-200">
                             <Image
                                 src="/icon-7.png"
                                 alt=""
@@ -85,7 +108,7 @@ export function HeroSection() {
                             />
                         </div>
                         {/* Slack - lower middle right */}
-                        <div className="absolute top-[50%] -right-32 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center">
+                        <div className="absolute top-[50%] -right-32 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center hover:scale-110 transition-transform duration-300 animate-in fade-in slide-in-from-right-4 duration-1000 delay-300">
                             <Image
                                 src="/icon-6.png"
                                 alt=""
@@ -95,7 +118,7 @@ export function HeroSection() {
                             />
                         </div>
                         {/* Gmail - bottom right */}
-                        <div className="absolute bottom-[5%] -right-28 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center">
+                        <div className="absolute bottom-[5%] -right-28 w-10 h-10 rounded-lg bg-white dark:bg-white/10 flex items-center justify-center hover:scale-110 transition-transform duration-300 animate-in fade-in slide-in-from-bottom-4 duration-1000 delay-400">
                             <Image
                                 src="/icon-4.png"
                                 alt=""
@@ -106,7 +129,7 @@ export function HeroSection() {
                         </div>
                     </div>
 
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold tracking-tight mb-6">
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold tracking-tight mb-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
                         Powering organizations to{" "}
                         <span
                             className={isGradient ? "bg-clip-text text-transparent" : "text-primary"}
@@ -119,27 +142,30 @@ export function HeroSection() {
                         {" "}without surrendering control
                     </h1>
 
-                    <p className="text-xl text-muted-foreground font-body leading-relaxed">
+                    <p className="text-xl text-muted-foreground font-body leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
                         Search and get verified answers from your internal tools. Centralize resources, reduce onboarding time and keep teams aligned.
                     </p>
                 </div>
 
-                <div className="flex flex-col sm:flex-row gap-4 mb-20 justify-center">
-                    <Button size="lg" className="h-12 px-8 text-base">
-                        Start for free <ArrowRight className="ml-2 h-4 w-4" />
+                <div className="flex flex-col sm:flex-row gap-4 mb-8 justify-center animate-in fade-in slide-in-from-bottom-8 duration-1000" style={{ animationDelay: '700ms' }}>
+                    <Button size="lg" className="h-12 px-8 text-base hover:scale-105 active:scale-95 transition-transform duration-200 group">
+                        Start for free <ArrowRight className="ml-2 h-4 w-4 group-hover:translate-x-1 transition-transform duration-200" />
                     </Button>
-                    <Button size="lg" variant="outline" className="h-12 px-8 text-base">
+                    <Button size="lg" variant="outline" className="h-12 px-8 text-base hover:scale-105 active:scale-95 transition-transform duration-200">
                         Book a demo
                     </Button>
                 </div>
 
+                {/* Logo Scroller */}
+                <LogoScroller />
+
                 {/* Hero Image */}
-                <div className="relative w-full max-w-7xl aspect-[21/9] rounded-t-xl border border-b-0 overflow-hidden shadow-2xl">
+                <div className="relative w-full max-w-7xl aspect-[21/9] rounded-t-xl border border-b-0 overflow-hidden shadow-2xl animate-in fade-in slide-in-from-bottom-12 duration-1000 delay-900">
                     <Image
                         src="/hero-product.png"
                         alt="Ollo Product Interface"
                         fill
-                        className="object-cover object-top bg-muted/50"
+                        className="object-cover object-top bg-muted/50 hover:scale-[1.02] transition-transform duration-700"
                         quality={100}
                         unoptimized
                         priority
