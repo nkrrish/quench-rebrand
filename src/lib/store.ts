@@ -44,15 +44,15 @@ export interface ThemeState {
 export const useThemeStore = create<ThemeState>()(
     persist(
         (set, get) => ({
-            fontHeading: 'Inter',
-            fontBody: 'Inter',
-            primaryColor: '#3b82f6', // Default blue
-            isGradient: false,
-            gradientColors: ['#3b82f6', '#8b5cf6'],
-            gradientDirection: 'to right',
-            radius: 0.5,
+            fontHeading: 'Stack Sans Headline',
+            fontBody: 'SF Pro Display',
+            primaryColor: '#FF3E8B', // Pink Orange theme default
+            isGradient: true,
+            gradientColors: ['#FF7A32', '#FF3E8B'],
+            gradientDirection: 'to bottom',
+            radius: 1.8,
             mode: 'light',
-            accentColor: null,
+            accentColor: '#00b9a6',
             savedThemes: [],
             setFontHeading: (font) => set({ fontHeading: font }),
             setFontBody: (font) => set({ fontBody: font }),
