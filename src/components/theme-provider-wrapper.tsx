@@ -2,6 +2,7 @@
 
 import * as React from "react";
 import { useThemeStore, loadAllThemes } from "@/lib/store";
+import { loadGoogleFont, fontFamilyToVariable } from "@/lib/googleFonts";
 
 export function ThemeProviderWrapper({
     children,
@@ -43,15 +44,30 @@ export function ThemeProviderWrapper({
         }
 
         // Apply Fonts
-        // We assume the fonts are loaded in layout.tsx with CSS variables matching their names
-        // e.g. --font-inter, --font-playfair
-        // We will map the selection to the variable name
-        const headingVar = `var(--font-${fontHeading.toLowerCase().replace(/ /g, "-")})`;
-        const bodyVar = `var(--font-${fontBody.toLowerCase().replace(/ /g, "-")})`;
+        // Load Google Fonts dynamically if needed
+        loadGoogleFont(fontHeading);
+        loadGoogleFont(fontBody);
 
-        // We can set a global variable that components use
-        root.style.setProperty("--font-heading-dynamic", headingVar);
-        root.style.setProperty("--font-body-dynamic", bodyVar);
+        // System fonts that are already defined in layout.tsx
+        const systemFonts = ["Stack Sans Headline", "Stack Sans Notch", "SF Pro Display", "SF Pro Text"];
+        
+        // For system fonts, use the CSS variable from layout.tsx
+        // For Google Fonts, use the font family name directly
+        const getFontValue = (fontFamily: string) => {
+            if (systemFonts.includes(fontFamily)) {
+                const varName = fontFamilyToVariable(fontFamily);
+                return `var(--font-${varName})`;
+            }
+            // For Google Fonts, use the font family name directly
+            return `"${fontFamily}", sans-serif`;
+        };
+
+        const headingFont = getFontValue(fontHeading);
+        const bodyFont = getFontValue(fontBody);
+
+        // Set CSS variables for dynamic fonts
+        root.style.setProperty("--font-heading-dynamic", headingFont);
+        root.style.setProperty("--font-body-dynamic", bodyFont);
 
         // Apply Accent Color if set
         if (accentColor) {

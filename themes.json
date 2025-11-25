@@ -16,22 +16,6 @@
     "accentColor": "#00b9a6"
   },
   {
-    "id": "c1a8f8c5-dcea-4b8e-bdd9-2a211a1224ff",
-    "name": "Orange",
-    "fontHeading": "Stack Sans Headline",
-    "fontBody": "SF Pro Display",
-    "primaryColor": "#FE4B00",
-    "isGradient": false,
-    "gradientColors": [
-      "#3b82f6",
-      "#8b5cf6"
-    ],
-    "gradientDirection": "to right",
-    "radius": 1.9,
-    "mode": "light",
-    "accentColor": "#5fe5ff"
-  },
-  {
     "id": "7c910b1c-4d2a-4ba3-b736-95dd3488bff5",
     "name": "Green + Teal",
     "fontHeading": "Stack Sans Headline",
@@ -76,6 +60,22 @@
     ],
     "gradientDirection": "to bottom",
     "radius": 1.8,
+    "mode": "light",
+    "accentColor": null
+  },
+  {
+    "id": "3318719b-d0e9-44b3-8556-5a03a539d950",
+    "name": "Orange",
+    "fontHeading": "Stack Sans Headline",
+    "fontBody": "SF Pro Display",
+    "primaryColor": "#FE4B00",
+    "isGradient": false,
+    "gradientColors": [
+      "#3b82f6",
+      "#8b5cf6"
+    ],
+    "gradientDirection": "to right",
+    "radius": 1.9,
     "mode": "light",
     "accentColor": null
   }

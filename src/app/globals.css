@@ -125,6 +125,38 @@
   body {
     @apply bg-background text-foreground;
   }
+
+  /* Make color inputs fill completely */
+  input[type="color"] {
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    appearance: none;
+    background: none;
+    border: none;
+    cursor: pointer;
+  }
+
+  input[type="color"]::-webkit-color-swatch-wrapper {
+    padding: 0;
+    border: none;
+    border-radius: inherit;
+  }
+
+  input[type="color"]::-webkit-color-swatch {
+    border: none;
+    border-radius: inherit;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
+
+  input[type="color"]::-moz-color-swatch {
+    border: none;
+    border-radius: inherit;
+    padding: 0;
+    width: 100%;
+    height: 100%;
+  }
 }
 
 @keyframes float {

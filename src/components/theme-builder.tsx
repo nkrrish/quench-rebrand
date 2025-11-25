@@ -29,18 +29,7 @@ import {
     PopoverTrigger,
 } from "@/components/ui/popover";
 import { cn, getComplementaryColor } from "@/lib/utils";
-
-const FONTS = [
-    { name: "Inter", value: "Inter" },
-    { name: "Playfair Display", value: "Playfair Display" },
-    { name: "Roboto", value: "Roboto" },
-    { name: "Lato", value: "Lato" },
-    { name: "Montserrat", value: "Montserrat" },
-    { name: "Stack Sans Headline", value: "Stack Sans Headline" }, // Mapped to Inter/System
-    { name: "Stack Sans Notch", value: "Stack Sans Notch" }, // Mapped to Inter/System
-    { name: "SF Pro Display", value: "SF Pro Display" },
-    { name: "SF Pro Text", value: "SF Pro Text" },
-];
+import { FontSelector } from "@/components/font-selector";
 
 const PRESET_COLORS = [
     "#3b82f6", // Blue
@@ -220,7 +209,7 @@ export function ThemeBuilder() {
                                 )}
                             />
                         )}
-                        <Card className="border-0 shadow-lg max-h-[80vh] overflow-y-auto">
+                        <Card className="border-0 shadow-lg max-h-[80vh] overflow-y-auto font-sans" style={{ fontFamily: 'system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif' }}>
                         <CardHeader className="pt-2 pb-1 border-b">
                             <div className="flex items-center justify-between">
                                 <div>
@@ -251,33 +240,19 @@ export function ThemeBuilder() {
                                         <div className="grid grid-cols-2 gap-4">
                                             <div className="space-y-2">
                                                 <Label className="text-xs">Heading Font</Label>
-                                                <Select value={fontHeading} onValueChange={setFontHeading}>
-                                                    <SelectTrigger>
-                                                        <SelectValue />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {FONTS.map((f) => (
-                                                            <SelectItem key={f.value} value={f.value}>
-                                                                {f.name}
-                                                            </SelectItem>
-                                                        ))}
-                                                    </SelectContent>
-                                                </Select>
+                                                <FontSelector
+                                                    value={fontHeading}
+                                                    onValueChange={setFontHeading}
+                                                    placeholder="Select heading font..."
+                                                />
                                             </div>
                                             <div className="space-y-2">
                                                 <Label className="text-xs">Body Font</Label>
-                                                <Select value={fontBody} onValueChange={setFontBody}>
-                                                    <SelectTrigger>
-                                                        <SelectValue />
-                                                    </SelectTrigger>
-                                                    <SelectContent>
-                                                        {FONTS.map((f) => (
-                                                            <SelectItem key={f.value} value={f.value}>
-                                                                {f.name}
-                                                            </SelectItem>
-                                                        ))}
-                                                    </SelectContent>
-                                                </Select>
+                                                <FontSelector
+                                                    value={fontBody}
+                                                    onValueChange={setFontBody}
+                                                    placeholder="Select body font..."
+                                                />
                                             </div>
                                         </div>
                                     </div>
@@ -300,29 +275,14 @@ export function ThemeBuilder() {
 
                                             {!isGradient ? (
                                                 <>
-                                                    <div className="flex flex-wrap gap-2.5">
-                                                        {PRESET_COLORS.map((color) => (
-                                                            <button
-                                                                key={color}
-                                                                className={cn(
-                                                                    "h-9 w-9 rounded-lg border-2 transition-all hover:scale-110 hover:shadow-md",
-                                                                    primaryColor === color 
-                                                                        ? "ring-2 ring-offset-2 ring-primary border-primary shadow-sm" 
-                                                                        : "border-muted hover:border-muted-foreground/50"
-                                                                )}
-                                                                style={{ backgroundColor: color }}
-                                                                onClick={() => setPrimaryColor(color)}
-                                                                title={color}
-                                                            />
-                                                        ))}
-                                                    </div>
                                                     <div className="flex items-center gap-2.5">
-                                                        <div className="relative">
+                                                        <div className="relative h-10 w-10">
                                                             <Input
                                                                 type="color"
                                                                 value={primaryColor}
                                                                 onChange={(e) => setPrimaryColor(e.target.value)}
-                                                                className="h-10 w-10 p-0 border-2 border-muted rounded-lg overflow-hidden cursor-pointer hover:border-muted-foreground/50 transition-colors"
+                                                                className="h-full w-full p-0 border-2 border-muted rounded-lg overflow-hidden cursor-pointer hover:border-muted-foreground/50 transition-colors appearance-none"
+                                                                style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
                                                             />
                                                         </div>
                                                         <Input
@@ -366,12 +326,13 @@ export function ThemeBuilder() {
                                                         <div className="space-y-2.5">
                                                             {gradientColors.map((color, index) => (
                                                                 <div key={index} className="flex items-center gap-2.5">
-                                                                    <div className="relative">
+                                                                    <div className="relative h-10 w-10 shrink-0">
                                                                         <Input
                                                                             type="color"
                                                                             value={color}
                                                                             onChange={(e) => updateGradientColor(index, e.target.value)}
-                                                                            className="h-10 w-10 p-0 border-2 border-muted rounded-lg overflow-hidden shrink-0 cursor-pointer hover:border-muted-foreground/50 transition-colors"
+                                                                            className="h-full w-full p-0 border-2 border-muted rounded-lg overflow-hidden cursor-pointer hover:border-muted-foreground/50 transition-colors appearance-none"
+                                                                            style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
                                                                         />
                                                                     </div>
                                                                     <Input
@@ -421,27 +382,8 @@ export function ThemeBuilder() {
                                         </div>
                                         {accentColor ? (
                                             <>
-                                                <div className="flex flex-wrap gap-2.5">
-                                                    {PRESET_COLORS.map((color) => (
-                                                        <button
-                                                            key={color}
-                                                            className={cn(
-                                                                "h-9 w-9 rounded-lg border-2 transition-all hover:scale-110 hover:shadow-md",
-                                                                accentColor === color 
-                                                                    ? "ring-2 ring-offset-2 ring-primary border-primary shadow-sm" 
-                                                                    : "border-muted hover:border-muted-foreground/50"
-                                                            )}
-                                                            style={{ backgroundColor: color }}
-                                                            onClick={() => {
-                                                                setAccentColor(color);
-                                                                setLastGeneratedColor(null);
-                                                            }}
-                                                            title={color}
-                                                        />
-                                                    ))}
-                                                </div>
                                                 <div className="flex items-center gap-2.5">
-                                                    <div className="relative">
+                                                    <div className="relative h-10 w-10">
                                                         <Input
                                                             type="color"
                                                             value={accentColor}
@@ -449,7 +391,8 @@ export function ThemeBuilder() {
                                                                 setAccentColor(e.target.value);
                                                                 setLastGeneratedColor(null);
                                                             }}
-                                                            className="h-10 w-10 p-0 border-2 border-muted rounded-lg overflow-hidden cursor-pointer hover:border-muted-foreground/50 transition-colors"
+                                                            className="h-full w-full p-0 border-2 border-muted rounded-lg overflow-hidden cursor-pointer hover:border-muted-foreground/50 transition-colors appearance-none"
+                                                            style={{ WebkitAppearance: 'none', MozAppearance: 'none' }}
                                                         />
                                                     </div>
                                                     <div className="relative flex-1">
@@ -617,8 +560,8 @@ export function ThemeBuilder() {
                                                 onChange={(e) => setThemeName(e.target.value)}
                                                 className="flex-1"
                                             />
-                                            <Button onClick={handleSave} disabled={!themeName.trim()} className="shrink-0">
-                                                <Save className="h-4 w-4 mr-2" /> Save
+                                            <Button onClick={handleSave} disabled={!themeName.trim()} className="shrink-0 gap-1">
+                                                <Save className="h-4 w-4" /> Save
                                             </Button>
                                         </div>
                                     </div>
