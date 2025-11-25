@@ -33,8 +33,10 @@ export function ThemeProviderWrapper({
 
         // Apply Primary Color & Gradient
         // Tailwind v4 supports hex in variables for opacity modifiers via color-mix
-        root.style.setProperty("--primary", primaryColor);
-        root.style.setProperty("--ring", primaryColor);
+        // For gradients, use the first gradient color for --primary to ensure hover states work
+        const primaryColorValue = isGradient && gradientColors.length > 0 ? gradientColors[0] : primaryColor;
+        root.style.setProperty("--primary", primaryColorValue);
+        root.style.setProperty("--ring", primaryColorValue);
 
         if (isGradient && gradientColors.length > 0) {
             const gradient = `linear-gradient(${gradientDirection}, ${gradientColors.join(", ")})`;
@@ -69,11 +71,13 @@ export function ThemeProviderWrapper({
         root.style.setProperty("--font-heading-dynamic", headingFont);
         root.style.setProperty("--font-body-dynamic", bodyFont);
 
-        // Apply Accent Color if set
+        // Apply Accent Color - use primary color as fallback if not set
+        // For gradients, use the first gradient color for accent to ensure hover states work
         if (accentColor) {
             root.style.setProperty("--accent", accentColor);
         } else {
-            root.style.removeProperty("--accent");
+            // Fallback to primary color (or first gradient color) when accent is not set
+            root.style.setProperty("--accent", primaryColorValue);
         }
 
     }, [fontHeading, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, mode, accentColor]);

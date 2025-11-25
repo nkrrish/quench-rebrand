@@ -48,6 +48,14 @@ const GRADIENT_DIRECTIONS = [
     { name: "Top Right", value: "to top right", icon: ArrowUpRight },
 ];
 
+// Default preset theme IDs (non-deletable)
+const DEFAULT_THEME_IDS = [
+    "94536ea6-c185-42f5-9d58-8c5781545e48", // Pink Orange
+    "7c910b1c-4d2a-4ba3-b736-95dd3488bff5", // Green + Teal
+    "8597e8f2-a756-440e-97f1-fbdbd7a01b36", // Mint Green
+    "3318719b-d0e9-44b3-8556-5a03a539d950", // Orange
+];
+
 export function ThemeBuilder() {
     const {
         fontHeading,
@@ -88,6 +96,13 @@ export function ThemeBuilder() {
             return saved ? parseInt(saved, 10) : 384; // 384px = w-96
         }
         return 384;
+    });
+    const [activeTab, setActiveTab] = React.useState(() => {
+        if (typeof window !== 'undefined') {
+            const saved = localStorage.getItem('theme-builder-tab');
+            return saved || 'saved';
+        }
+        return 'saved';
     });
     const [isResizing, setIsResizing] = React.useState(false);
     const [showResizeHandle, setShowResizeHandle] = React.useState(false);
@@ -190,7 +205,11 @@ export function ThemeBuilder() {
                     className="p-0 mr-4 mb-2" 
                     side="left" 
                     align="end"
-                    style={{ width: `${width}px` }}
+                    style={{ 
+                        width: `${width}px`,
+                        '--primary': isGradient && gradientColors.length > 0 ? gradientColors[0] : primaryColor,
+                        '--accent': accentColor || (isGradient && gradientColors.length > 0 ? gradientColors[0] : primaryColor),
+                    } as React.CSSProperties & { '--primary': string; '--accent': string }}
                 >
                     <div 
                         ref={containerRef}
@@ -227,10 +246,10 @@ export function ThemeBuilder() {
                             </div>
                         </CardHeader>
                         <CardContent className="px-6 pt-0 pb-0">
-                            <Tabs defaultValue="customize">
+                            <Tabs defaultValue="saved">
                                 <TabsList className="grid w-full grid-cols-2 mb-4">
-                                    <TabsTrigger value="customize">Customize</TabsTrigger>
                                     <TabsTrigger value="saved">Saved Themes</TabsTrigger>
+                                    <TabsTrigger value="customize">Customize</TabsTrigger>
                                 </TabsList>
 
                                 <TabsContent value="customize" className="space-y-6">
@@ -568,55 +587,120 @@ export function ThemeBuilder() {
                                 </TabsContent>
 
                                 <TabsContent value="saved" className="space-y-4 mt-4">
-                                    {savedThemes.length === 0 ? (
-                                        <div className="text-center py-12 text-muted-foreground text-sm">
-                                            <Paintbrush className="h-8 w-8 mx-auto mb-3 opacity-50" />
-                                            <p>No saved themes yet.</p>
-                                            <p className="text-xs mt-1">Create and save your first theme!</p>
-                                        </div>
-                                    ) : (
-                                        <div className="space-y-2.5 max-h-[400px] overflow-y-auto pr-2">
-                                            {savedThemes.map((theme) => (
-                                                <div
-                                                    key={theme.id}
-                                                    className="flex items-center justify-between p-4 border-2 rounded-lg bg-card hover:bg-accent/30 hover:border-accent transition-all cursor-pointer group"
-                                                >
-                                                    <div className="flex items-center gap-3">
-                                                        <div
-                                                            className="h-10 w-10 rounded-lg border-2 border-muted shadow-sm group-hover:shadow-md transition-shadow"
-                                                            style={{ backgroundColor: theme.primaryColor }}
-                                                        />
-                                                        <div className="flex flex-col">
-                                                            <span className="font-semibold text-sm text-foreground">{theme.name}</span>
-                                                            <span className="text-xs text-muted-foreground mt-0.5">
-                                                                {theme.fontHeading} / {theme.mode}
-                                                            </span>
+                                    {(() => {
+                                        // Separate default themes from user-created themes
+                                        const defaultThemes = savedThemes.filter(theme => DEFAULT_THEME_IDS.includes(theme.id));
+                                        const userThemes = savedThemes.filter(theme => !DEFAULT_THEME_IDS.includes(theme.id));
+
+                                        // Sort default themes in specific order: Pink Orange, Green + Teal, Orange, Mint Green
+                                        const themeOrder = [
+                                            "94536ea6-c185-42f5-9d58-8c5781545e48", // Pink Orange
+                                            "7c910b1c-4d2a-4ba3-b736-95dd3488bff5", // Green + Teal
+                                            "3318719b-d0e9-44b3-8556-5a03a539d950", // Orange
+                                            "8597e8f2-a756-440e-97f1-fbdbd7a01b36", // Mint Green
+                                        ];
+                                        const sortedDefaultThemes = defaultThemes.sort((a, b) => {
+                                            const indexA = themeOrder.indexOf(a.id);
+                                            const indexB = themeOrder.indexOf(b.id);
+                                            return (indexA === -1 ? 999 : indexA) - (indexB === -1 ? 999 : indexB);
+                                        });
+
+                                        return (
+                                            <div className="space-y-4">
+                                                {/* Default Preset Themes - Non-deletable */}
+                                                {sortedDefaultThemes.length > 0 && (
+                                                    <div className="space-y-2">
+                                                        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Preset Themes</h4>
+                                                        <div className="grid grid-cols-2 gap-2">
+                                                            {sortedDefaultThemes.map((theme) => (
+                                                                <div
+                                                                    key={theme.id}
+                                                                    onClick={() => loadTheme(theme)}
+                                                                    className="flex items-center gap-3 p-4 border-2 rounded-lg bg-card hover:bg-muted hover:border-muted-foreground/50 transition-all cursor-pointer group"
+                                                                >
+                                                                    <div
+                                                                        className="h-10 w-10 rounded-full border-2 border-muted shadow-sm group-hover:shadow-md transition-shadow shrink-0"
+                                                                        style={theme.isGradient && theme.gradientColors?.length 
+                                                                            ? {
+                                                                                backgroundImage: `linear-gradient(${theme.gradientDirection || "to right"}, ${theme.gradientColors.join(", ")})`
+                                                                            }
+                                                                            : {
+                                                                                backgroundColor: theme.primaryColor
+                                                                            }
+                                                                        }
+                                                                    />
+                                                                    <div className="flex flex-col min-w-0 flex-1">
+                                                                        <span className="font-semibold text-sm text-foreground truncate">{theme.name}</span>
+                                                                        <span className="text-xs text-muted-foreground mt-0.5 truncate">
+                                                                            {theme.fontHeading} / {theme.fontBody}
+                                                                        </span>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
                                                         </div>
                                                     </div>
-                                                    <div className="flex gap-1.5">
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            className="h-9 w-9 hover:bg-primary/10 hover:text-primary"
-                                                            onClick={() => loadTheme(theme)}
-                                                            title="Load theme"
-                                                        >
-                                                            <Check className="h-4 w-4" />
-                                                        </Button>
-                                                        <Button
-                                                            variant="ghost"
-                                                            size="icon"
-                                                            className="h-9 w-9 text-destructive hover:bg-destructive/10 hover:text-destructive"
-                                                            onClick={() => deleteTheme(theme.id)}
-                                                            title="Delete theme"
-                                                        >
-                                                            <Trash className="h-4 w-4" />
-                                                        </Button>
+                                                )}
+
+                                                {/* User Created Themes - Deletable */}
+                                                {userThemes.length > 0 && (
+                                                    <div className="space-y-2">
+                                                        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Your Themes</h4>
+                                                        <div className="space-y-2.5 max-h-[300px] overflow-y-auto pr-2">
+                                                            {userThemes.map((theme) => (
+                                                                <div
+                                                                    key={theme.id}
+                                                                    className="flex items-center justify-between p-4 border-2 rounded-lg bg-card hover:bg-muted hover:border-muted-foreground/50 transition-all cursor-pointer group"
+                                                                >
+                                                                    <div 
+                                                                        className="flex items-center gap-3 flex-1"
+                                                                        onClick={() => loadTheme(theme)}
+                                                                    >
+                                                                        <div
+                                                                            className="h-10 w-10 rounded-full border-2 border-muted shadow-sm group-hover:shadow-md transition-shadow shrink-0"
+                                                                            style={theme.isGradient && theme.gradientColors?.length 
+                                                                                ? {
+                                                                                    backgroundImage: `linear-gradient(${theme.gradientDirection || "to right"}, ${theme.gradientColors.join(", ")})`
+                                                                                }
+                                                                                : {
+                                                                                    backgroundColor: theme.primaryColor
+                                                                                }
+                                                                            }
+                                                                        />
+                                                                        <div className="flex flex-col min-w-0">
+                                                                            <span className="font-semibold text-sm text-foreground truncate">{theme.name}</span>
+                                                                            <span className="text-xs text-muted-foreground mt-0.5 truncate">
+                                                                                {theme.fontHeading} / {theme.fontBody}
+                                                                            </span>
+                                                                        </div>
+                                                                    </div>
+                                                                    <div className="flex gap-1.5 shrink-0">
+                                                                        <Button
+                                                                            variant="ghost"
+                                                                            size="icon"
+                                                                            className="h-9 w-9 text-destructive hover:bg-destructive/10 hover:text-destructive"
+                                                                            onClick={() => deleteTheme(theme.id)}
+                                                                            title="Delete theme"
+                                                                        >
+                                                                            <Trash className="h-4 w-4" />
+                                                                        </Button>
+                                                                    </div>
+                                                                </div>
+                                                            ))}
+                                                        </div>
                                                     </div>
-                                                </div>
-                                            ))}
-                                        </div>
-                                    )}
+                                                )}
+
+                                                {/* Empty state */}
+                                                {sortedDefaultThemes.length === 0 && userThemes.length === 0 && (
+                                                    <div className="text-center py-12 text-muted-foreground text-sm">
+                                                        <Paintbrush className="h-8 w-8 mx-auto mb-3 opacity-50" />
+                                                        <p>No saved themes yet.</p>
+                                                        <p className="text-xs mt-1">Create and save your first theme!</p>
+                                                    </div>
+                                                )}
+                                            </div>
+                                        );
+                                    })()}
                                 </TabsContent>
                             </Tabs>
                         </CardContent>
