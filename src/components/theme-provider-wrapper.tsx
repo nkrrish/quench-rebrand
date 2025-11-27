@@ -52,15 +52,17 @@ export function ThemeProviderWrapper({
 
         // System fonts that are already defined in layout.tsx
         const systemFonts = ["Stack Sans Headline", "Stack Sans Notch", "SF Pro Display", "SF Pro Text"];
+        // Fontshare fonts (loaded via CDN, use font family name directly)
+        const fontshareFonts = ["Satoshi", "Clash Display"];
         
         // For system fonts, use the CSS variable from layout.tsx
-        // For Google Fonts, use the font family name directly
+        // For Fontshare and Google Fonts, use the font family name directly
         const getFontValue = (fontFamily: string) => {
             if (systemFonts.includes(fontFamily)) {
                 const varName = fontFamilyToVariable(fontFamily);
                 return `var(--font-${varName})`;
             }
-            // For Google Fonts, use the font family name directly
+            // For Fontshare and Google Fonts, use the font family name directly
             return `"${fontFamily}", sans-serif`;
         };
 

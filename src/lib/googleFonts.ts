@@ -65,6 +65,38 @@ function getFallbackFonts(): GoogleFont[] {
 }
 
 /**
+ * Fontshare font mappings
+ */
+const FONTSHARE_FONTS: Record<string, string> = {
+  "Satoshi": "satoshi",
+  "Clash Display": "clash-display",
+};
+
+/**
+ * Loads a Fontshare font dynamically by adding a link tag to the document head
+ */
+function loadFontshareFont(fontFamily: string): void {
+  if (typeof window === "undefined") return;
+  
+  const fontshareId = FONTSHARE_FONTS[fontFamily];
+  if (!fontshareId) return;
+  
+  // Check if font is already loaded
+  const fontId = `fontshare-font-${fontshareId}`;
+  if (document.getElementById(fontId)) {
+    return;
+  }
+
+  // Create link element for Fontshare
+  const link = document.createElement("link");
+  link.id = fontId;
+  link.rel = "stylesheet";
+  link.href = `https://api.fontshare.com/v2/css?f[]=${fontshareId}@400,700&display=swap`;
+  
+  document.head.appendChild(link);
+}
+
+/**
  * Loads a Google Font dynamically by adding a link tag to the document head
  */
 export function loadGoogleFont(fontFamily: string): void {
@@ -82,7 +114,13 @@ export function loadGoogleFont(fontFamily: string): void {
     return;
   }
 
-  // Create link element
+  // Check if it's a Fontshare font
+  if (FONTSHARE_FONTS[fontFamily]) {
+    loadFontshareFont(fontFamily);
+    return;
+  }
+
+  // Create link element for Google Fonts
   const link = document.createElement("link");
   link.id = fontId;
   link.rel = "stylesheet";

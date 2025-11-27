@@ -28,6 +28,8 @@ export function FontSelector({ value, onValueChange, placeholder = "Select font.
     { family: "Stack Sans Notch", category: "sans-serif" },
     { family: "SF Pro Display", category: "sans-serif" },
     { family: "SF Pro Text", category: "sans-serif" },
+    { family: "Satoshi", category: "sans-serif" },
+    { family: "Clash Display", category: "display" },
   ]);
 
   // Fetch fonts on mount

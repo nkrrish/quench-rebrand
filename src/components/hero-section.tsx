@@ -183,7 +183,7 @@ export function HeroSection() {
                         {" "}without surrendering control
                     </h1>
 
-                    <p className="text-xl text-muted-foreground font-body leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
+                    <p className="text-xl text-foreground/80 dark:text-foreground/90 font-body leading-relaxed animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-500">
                         Search and get verified answers from your internal tools. Centralize resources, reduce onboarding time and keep teams aligned.
                     </p>
                 </div>
