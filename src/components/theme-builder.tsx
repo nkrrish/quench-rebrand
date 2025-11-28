@@ -50,10 +50,12 @@ const GRADIENT_DIRECTIONS = [
 
 // Default preset theme IDs (non-deletable)
 const DEFAULT_THEME_IDS = [
-    "94536ea6-c185-42f5-9d58-8c5781545e48", // Pink Orange
-    "7c910b1c-4d2a-4ba3-b736-95dd3488bff5", // Green + Teal
-    "8597e8f2-a756-440e-97f1-fbdbd7a01b36", // Mint Green
     "3318719b-d0e9-44b3-8556-5a03a539d950", // Orange
+    "7c910b1c-4d2a-4ba3-b736-95dd3488bff5", // Green + Teal
+    "94536ea6-c185-42f5-9d58-8c5781545e48", // Stack Sans Headline
+    "a1b2c3d4-e5f6-7890-abcd-ef1234567890", // Funnel
+    "b2c3d4e5-f6a7-8901-bcde-f23456789012", // Sora
+    "d4e5f6a7-b8c9-0123-def4-456789012345", // Instrument
 ];
 
 export function ThemeBuilder() {
@@ -592,12 +594,14 @@ export function ThemeBuilder() {
                                         const defaultThemes = savedThemes.filter(theme => DEFAULT_THEME_IDS.includes(theme.id));
                                         const userThemes = savedThemes.filter(theme => !DEFAULT_THEME_IDS.includes(theme.id));
 
-                                        // Sort default themes in specific order: Pink Orange, Green + Teal, Orange, Mint Green
+                                        // Sort default themes in specific order: Orange, Green + Teal, Stack Sans Headline, Funnel, Sora, Instrument
                                         const themeOrder = [
-                                            "94536ea6-c185-42f5-9d58-8c5781545e48", // Pink Orange
-                                            "7c910b1c-4d2a-4ba3-b736-95dd3488bff5", // Green + Teal
                                             "3318719b-d0e9-44b3-8556-5a03a539d950", // Orange
-                                            "8597e8f2-a756-440e-97f1-fbdbd7a01b36", // Mint Green
+                                            "7c910b1c-4d2a-4ba3-b736-95dd3488bff5", // Green + Teal
+                                            "94536ea6-c185-42f5-9d58-8c5781545e48", // Stack Sans Headline
+                                            "a1b2c3d4-e5f6-7890-abcd-ef1234567890", // Funnel
+                                            "b2c3d4e5-f6a7-8901-bcde-f23456789012", // Sora
+                                            "d4e5f6a7-b8c9-0123-def4-456789012345", // Instrument
                                         ];
                                         const sortedDefaultThemes = defaultThemes.sort((a, b) => {
                                             const indexA = themeOrder.indexOf(a.id);
