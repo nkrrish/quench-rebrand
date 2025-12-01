@@ -50,11 +50,9 @@ const GRADIENT_DIRECTIONS = [
 ];
 
 // Default preset theme IDs (non-deletable)
-// All saved themes are now presets
 const DEFAULT_THEME_IDS = [
     "06fcf52a-a9e2-4ecd-88a3-f6005f24d535", // Plus Jakarta Sans
     "9dfb88ae-7fb7-4cc2-9c9b-01ff82bbb471", // Sora
-    "4ea45cc6-0780-453c-9028-b1b286366b1b", // General Sans
     "7aad87da-b3f5-47d5-83d7-f9bed03d3338", // Red Hat Display
     "ae51ce6d-b83f-4dc2-808f-3287c3d41a04", // Epilogue
 ];
