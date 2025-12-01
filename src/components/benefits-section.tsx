@@ -34,7 +34,7 @@ export function BenefitsSection() {
         <section className="py-24 bg-background">
             <div className="container mx-auto">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+                    <h2 className="text-3xl md:text-4xl font-heading mb-4">
                         Why teams choose{" "}
                         <span
                             className={isGradient ? "bg-clip-text text-transparent" : "text-primary"}

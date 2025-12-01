@@ -170,7 +170,7 @@ export function HeroSection() {
                         </div>
                     </div>
 
-                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading font-bold tracking-tight mb-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
+                    <h1 className="text-4xl md:text-6xl lg:text-7xl font-heading tracking-tight mb-6 animate-in fade-in slide-in-from-bottom-8 duration-1000 delay-300">
                         Powering organizations to{" "}
                         <span
                             className={isGradient ? "bg-clip-text text-transparent" : "text-primary"}
@@ -178,7 +178,7 @@ export function HeroSection() {
                                 backgroundImage: `linear-gradient(${gradientDirection}, ${gradientColors.join(", ")})`
                             } : undefined}
                         >
-                            leverage AI
+                            use AI
                         </span>
                         {" "}without surrendering control
                     </h1>

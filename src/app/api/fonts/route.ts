@@ -1,5 +1,6 @@
-// Next.js API route to fetch Google Fonts (server-side to avoid CORS)
+// Next.js API route to fetch Google Fonts and Fontshare Fonts (server-side to avoid CORS)
 import type { NextRequest } from "next/server";
+import { getFontshareFonts } from "@/lib/googleFonts";
 
 let cachedFonts: any = null;
 let cacheTimestamp: number = 0;
@@ -29,54 +30,82 @@ export async function GET(_req: NextRequest) {
     const data = await response.json();
 
     // Transform the metadata format to our format
-    const fonts = data.familyMetadataList.map((font: any) => {
-      // Extract weights from font keys (e.g., "400", "400i", "700" -> ["400", "700"])
-      const variants = font.fonts
-        ? Object.keys(font.fonts)
-            .filter((v: string) => !v.endsWith("i")) // Filter out italic variants
-            .map((v: string) => v.replace(/[^0-9]/g, "")) // Extract just the number
-            .filter((v: string, i: number, arr: string[]) => arr.indexOf(v) === i) // Remove duplicates
-        : ["400", "700"];
+    const googleFonts = data.familyMetadataList.map((font: any) => {
+      // Extract all styles (weights + italics) from font keys
+      // Keys are like "400", "400i", "700", "700i" etc.
+      const styles: Array<{ weight: string; italic: boolean }> = [];
+      
+      if (font.fonts) {
+        Object.keys(font.fonts).forEach((key: string) => {
+          const isItalic = key.endsWith("i");
+          const weight = key.replace(/[^0-9]/g, ""); // Extract numeric weight
+          if (weight) {
+            // Check if this style already exists
+            const exists = styles.some(s => s.weight === weight && s.italic === isItalic);
+            if (!exists) {
+              styles.push({ weight, italic: isItalic });
+            }
+          }
+        });
+      } else {
+        // Default styles if no font data
+        styles.push({ weight: "400", italic: false }, { weight: "700", italic: false });
+      }
+
+      // Legacy variants (just weights, no italics) for backward compatibility
+      const variants = [...new Set(styles.map(s => s.weight))];
 
       return {
         family: font.family,
-        variants,
+        variants, // Legacy support
+        styles, // New: actual styles
         subsets: font.subsets || ["latin"],
         category: font.category || "sans-serif",
+        source: "google" as const,
       };
     });
 
+    // Get Fontshare fonts
+    const fontshareFonts = getFontshareFonts();
+
+    // Combine all fonts
+    const allFonts = [...fontshareFonts, ...googleFonts];
+
     // Cache the result
-    cachedFonts = fonts;
+    cachedFonts = allFonts;
     cacheTimestamp = Date.now();
 
-    return new Response(JSON.stringify(fonts), {
+    return new Response(JSON.stringify(allFonts), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });
   } catch (error) {
-    console.error("Error fetching Google Fonts:", error);
+    console.error("Error fetching fonts:", error);
     
-    // Return fallback fonts
-    const fallbackFonts = [
-      { family: "Inter", variants: ["400", "700"], subsets: ["latin"], category: "sans-serif" },
-      { family: "Roboto", variants: ["400", "700"], subsets: ["latin"], category: "sans-serif" },
-      { family: "Open Sans", variants: ["400", "700"], subsets: ["latin"], category: "sans-serif" },
-      { family: "Lato", variants: ["400", "700"], subsets: ["latin"], category: "sans-serif" },
-      { family: "Montserrat", variants: ["400", "700"], subsets: ["latin"], category: "sans-serif" },
-      { family: "Playfair Display", variants: ["400", "700"], subsets: ["latin"], category: "serif" },
-      { family: "Poppins", variants: ["400", "700"], subsets: ["latin"], category: "sans-serif" },
-      { family: "Raleway", variants: ["400", "700"], subsets: ["latin"], category: "sans-serif" },
-      { family: "Oswald", variants: ["400", "700"], subsets: ["latin"], category: "sans-serif" },
-      { family: "Merriweather", variants: ["400", "700"], subsets: ["latin"], category: "serif" },
-      { family: "Source Sans Pro", variants: ["400", "700"], subsets: ["latin"], category: "sans-serif" },
-      { family: "Nunito", variants: ["400", "700"], subsets: ["latin"], category: "sans-serif" },
-      { family: "Ubuntu", variants: ["400", "700"], subsets: ["latin"], category: "sans-serif" },
-      { family: "Crimson Text", variants: ["400", "700"], subsets: ["latin"], category: "serif" },
-      { family: "Lora", variants: ["400", "700"], subsets: ["latin"], category: "serif" },
+    // Return fallback fonts with Fontshare fonts
+    const fontshareFonts = getFontshareFonts();
+    const defaultStyles = [{ weight: "400", italic: false }, { weight: "700", italic: false }];
+    const fallbackGoogleFonts = [
+      { family: "Inter", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "sans-serif", source: "google" as const },
+      { family: "Roboto", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "sans-serif", source: "google" as const },
+      { family: "Open Sans", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "sans-serif", source: "google" as const },
+      { family: "Lato", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "sans-serif", source: "google" as const },
+      { family: "Montserrat", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "sans-serif", source: "google" as const },
+      { family: "Playfair Display", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "serif", source: "google" as const },
+      { family: "Poppins", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "sans-serif", source: "google" as const },
+      { family: "Raleway", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "sans-serif", source: "google" as const },
+      { family: "Oswald", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "sans-serif", source: "google" as const },
+      { family: "Merriweather", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "serif", source: "google" as const },
+      { family: "Source Sans Pro", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "sans-serif", source: "google" as const },
+      { family: "Nunito", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "sans-serif", source: "google" as const },
+      { family: "Ubuntu", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "sans-serif", source: "google" as const },
+      { family: "Crimson Text", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "serif", source: "google" as const },
+      { family: "Lora", variants: ["400", "700"], styles: defaultStyles, subsets: ["latin"], category: "serif", source: "google" as const },
     ];
 
-    return new Response(JSON.stringify(fallbackFonts), {
+    const allFonts = [...fontshareFonts, ...fallbackGoogleFonts];
+
+    return new Response(JSON.stringify(allFonts), {
       status: 200,
       headers: { "Content-Type": "application/json" },
     });

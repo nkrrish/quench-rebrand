@@ -11,6 +11,7 @@ export function ThemeProviderWrapper({
 }) {
     const {
         fontHeading,
+        fontHeadingWeight,
         fontBody,
         primaryColor,
         isGradient,
@@ -45,15 +46,44 @@ export function ThemeProviderWrapper({
             root.style.setProperty("--primary-gradient", primaryColor);
         }
 
+        // Parse font heading weight and italic from style value
+        // Format: "400", "500", "700i" (i suffix means italic)
+        let headingWeight = '500';
+        let headingItalic = false;
+        
+        if (fontHeadingWeight) {
+            if (fontHeadingWeight.endsWith('i')) {
+                headingWeight = fontHeadingWeight.slice(0, -1);
+                headingItalic = true;
+            } else {
+                // Check if it's a weight name (e.g., "Medium") or numeric (e.g., "500")
+                const weightMap: Record<string, string> = {
+                    'Thin': '100',
+                    'Extra Light': '200',
+                    'Light': '300',
+                    'Regular': '400',
+                    'Medium': '500',
+                    'Semi Bold': '600',
+                    'Bold': '700',
+                    'Extra Bold': '800',
+                    'Black': '900',
+                };
+                headingWeight = weightMap[fontHeadingWeight] || fontHeadingWeight || '500';
+            }
+        }
+
         // Apply Fonts
-        // Load Google Fonts dynamically if needed
-        loadGoogleFont(fontHeading);
-        loadGoogleFont(fontBody);
+        // Load fonts with correct weight and italic
+        // Note: loadGoogleFont now returns a promise, but we don't need to await it here
+        loadGoogleFont(fontHeading, headingWeight, headingItalic).catch(err => {
+            console.warn(`Failed to load heading font "${fontHeading}":`, err);
+        });
+        loadGoogleFont(fontBody).catch(err => {
+            console.warn(`Failed to load body font "${fontBody}":`, err);
+        });
 
         // System fonts that are already defined in layout.tsx
         const systemFonts = ["Stack Sans Headline", "Stack Sans Notch", "SF Pro Display", "SF Pro Text"];
-        // Fontshare fonts (loaded via CDN, use font family name directly)
-        const fontshareFonts = ["Satoshi", "Clash Display"];
         
         // For system fonts, use the CSS variable from layout.tsx
         // For Fontshare and Google Fonts, use the font family name directly
@@ -71,6 +101,8 @@ export function ThemeProviderWrapper({
 
         // Set CSS variables for dynamic fonts
         root.style.setProperty("--font-heading-dynamic", headingFont);
+        root.style.setProperty("--font-heading-weight", headingWeight);
+        root.style.setProperty("--font-heading-italic", headingItalic ? 'italic' : 'normal');
         root.style.setProperty("--font-body-dynamic", bodyFont);
 
         // Apply Accent Color - use primary color as fallback if not set
@@ -82,7 +114,7 @@ export function ThemeProviderWrapper({
             root.style.setProperty("--accent", primaryColorValue);
         }
 
-    }, [fontHeading, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, mode, accentColor]);
+    }, [fontHeading, fontHeadingWeight, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, mode, accentColor]);
 
     // Load themes once on component mount
     React.useEffect(() => {

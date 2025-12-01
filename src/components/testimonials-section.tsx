@@ -31,7 +31,7 @@ export function TestimonialsSection() {
         <section className="py-24 bg-muted/30">
             <div className="container mx-auto">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+                    <h2 className="text-3xl md:text-4xl font-heading mb-4">
                         Don't take our{" "}
                         <span
                             className={isGradient ? "bg-clip-text text-transparent" : "text-primary"}
@@ -87,7 +87,7 @@ export function TestimonialsSection() {
                                         borderTopColor: `${accentColor}30`
                                     } : undefined}
                                 >
-                                    <p className="font-semibold font-heading">{testimonial.author}</p>
+                                    <p className="font-heading">{testimonial.author}</p>
                                     <p className="text-sm text-muted-foreground">
                                         {testimonial.role} at {testimonial.company}
                                     </p>

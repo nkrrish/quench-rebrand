@@ -6,6 +6,7 @@ export interface SavedTheme {
     id: string;
     name: string;
     fontHeading: string;
+    fontHeadingWeight?: string;
     fontBody: string;
     primaryColor: string;
     isGradient: boolean;
@@ -18,6 +19,7 @@ export interface SavedTheme {
 
 export interface ThemeState {
     fontHeading: string;
+    fontHeadingWeight: string;
     fontBody: string;
     primaryColor: string;
     isGradient: boolean;
@@ -28,6 +30,7 @@ export interface ThemeState {
     accentColor: string | null;
     savedThemes: SavedTheme[];
     setFontHeading: (font: string) => void;
+    setFontHeadingWeight: (weight: string) => void;
     setFontBody: (font: string) => void;
     setPrimaryColor: (color: string) => void;
     setIsGradient: (isGradient: boolean) => void;
@@ -45,6 +48,7 @@ export const useThemeStore = create<ThemeState>()(
     persist(
         (set, get) => ({
             fontHeading: 'Stack Sans Headline',
+            fontHeadingWeight: '500', // Use numeric value for consistency
             fontBody: 'SF Pro Display',
             primaryColor: '#FF3E8B', // Pink Orange theme default
             isGradient: true,
@@ -55,6 +59,7 @@ export const useThemeStore = create<ThemeState>()(
             accentColor: '#00b9a6',
             savedThemes: [],
             setFontHeading: (font) => set({ fontHeading: font }),
+            setFontHeadingWeight: (weight) => set({ fontHeadingWeight: weight }),
             setFontBody: (font) => set({ fontBody: font }),
             setPrimaryColor: (color) => set({ primaryColor: color }),
             setIsGradient: (isGradient) => set({ isGradient }),
@@ -64,11 +69,12 @@ export const useThemeStore = create<ThemeState>()(
             setMode: (mode) => set({ mode }),
             setAccentColor: (color) => set({ accentColor: color }),
             saveTheme: async (name) => {
-                const { fontHeading, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, accentColor, savedThemes } = get();
+                const { fontHeading, fontHeadingWeight, fontBody, primaryColor, isGradient, gradientColors, gradientDirection, radius, accentColor, savedThemes } = get();
                 const newTheme: SavedTheme = {
                     id: crypto.randomUUID(),
                     name,
                     fontHeading,
+                    fontHeadingWeight,
                     fontBody,
                     primaryColor,
                     isGradient,
@@ -91,6 +97,7 @@ export const useThemeStore = create<ThemeState>()(
             loadTheme: (theme) => {
                 set({
                     fontHeading: theme.fontHeading,
+                    fontHeadingWeight: theme.fontHeadingWeight || '500', // Default to Medium (500)
                     fontBody: theme.fontBody,
                     primaryColor: theme.primaryColor,
                     isGradient: theme.isGradient || false,

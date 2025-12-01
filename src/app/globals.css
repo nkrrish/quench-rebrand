@@ -43,11 +43,13 @@
   --radius-lg: var(--radius);
   --radius-xl: calc(var(--radius) + 4px);
   --font-heading: var(--font-heading-dynamic);
+  --font-heading-weight: 500;
   --font-body: var(--font-body-dynamic);
 }
 
 :root {
   --font-heading-dynamic: var(--font-inter);
+  --font-heading-weight: 500;
   --font-body-dynamic: var(--font-inter);
   --radius: 0.625rem;
   --background: oklch(1 0 0);
@@ -124,6 +126,33 @@
 
   body {
     @apply bg-background text-foreground;
+  }
+
+  .font-heading {
+    font-weight: var(--font-heading-weight, 500) !important;
+    font-style: var(--font-heading-italic, normal) !important;
+  }
+
+  /* Hide scrollbar for category filter */
+  .scrollbar-hide {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+
+  .scrollbar-hide::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Override any font-weight utilities on font-heading elements */
+  .font-heading.font-bold,
+  .font-heading.font-semibold,
+  .font-heading.font-medium,
+  .font-heading.font-light,
+  .font-heading.font-thin,
+  .font-heading.font-extralight,
+  .font-heading.font-normal {
+    font-weight: var(--font-heading-weight, 500) !important;
+    font-style: var(--font-heading-italic, normal) !important;
   }
 
   /* Make color inputs fill completely */

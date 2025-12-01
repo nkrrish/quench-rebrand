@@ -7,6 +7,7 @@ export interface SavedTheme {
     id: string;
     name: string;
     fontHeading: string;
+    fontHeadingWeight?: string;
     fontBody: string;
     primaryColor: string;
     isGradient: boolean;

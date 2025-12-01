@@ -111,7 +111,7 @@ function CountUpStat({
             style={{ animationDelay: `${index * 100}ms` }}
         >
             <div
-                className={`text-4xl md:text-5xl font-heading font-bold mb-2 ${!isGradient && 'text-primary'}`}
+                className={`text-4xl md:text-5xl font-heading mb-2 ${!isGradient && 'text-primary'}`}
                 style={isGradient ? {
                     backgroundImage: `linear-gradient(${gradientDirection}, ${gradientColors.join(", ")})`,
                     WebkitBackgroundClip: 'text',

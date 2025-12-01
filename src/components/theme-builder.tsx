@@ -1,8 +1,8 @@
 "use client";
 
 import * as React from "react";
-import { Paintbrush, Moon, Sun, Save, Trash, Check, Plus, X, ArrowRight, ArrowDown, ArrowDownRight, ArrowUpRight, Sparkles, Settings } from "lucide-react";
-import { useThemeStore } from "@/lib/store";
+import { Paintbrush, Moon, Sun, Save, Trash, Check, Plus, X, ArrowRight, ArrowDown, ArrowDownRight, ArrowUpRight, Sparkles, Settings, RefreshCw } from "lucide-react";
+import { useThemeStore, loadAllThemes } from "@/lib/store";
 import { Button } from "@/components/ui/button";
 import {
     Card,
@@ -30,6 +30,7 @@ import {
 } from "@/components/ui/popover";
 import { cn, getComplementaryColor } from "@/lib/utils";
 import { FontSelector } from "@/components/font-selector";
+import { fetchAllFonts, getAvailableStyles, GoogleFont } from "@/lib/googleFonts";
 
 const PRESET_COLORS = [
     "#3b82f6", // Blue
@@ -49,18 +50,19 @@ const GRADIENT_DIRECTIONS = [
 ];
 
 // Default preset theme IDs (non-deletable)
+// All saved themes are now presets
 const DEFAULT_THEME_IDS = [
-    "3318719b-d0e9-44b3-8556-5a03a539d950", // Orange
-    "7c910b1c-4d2a-4ba3-b736-95dd3488bff5", // Green + Teal
-    "94536ea6-c185-42f5-9d58-8c5781545e48", // Stack Sans Headline
-    "a1b2c3d4-e5f6-7890-abcd-ef1234567890", // Funnel
-    "b2c3d4e5-f6a7-8901-bcde-f23456789012", // Sora
-    "d4e5f6a7-b8c9-0123-def4-456789012345", // Instrument
+    "06fcf52a-a9e2-4ecd-88a3-f6005f24d535", // Plus Jakarta Sans
+    "9dfb88ae-7fb7-4cc2-9c9b-01ff82bbb471", // Sora
+    "4ea45cc6-0780-453c-9028-b1b286366b1b", // General Sans
+    "7aad87da-b3f5-47d5-83d7-f9bed03d3338", // Red Hat Display
+    "ae51ce6d-b83f-4dc2-808f-3287c3d41a04", // Epilogue
 ];
 
 export function ThemeBuilder() {
     const {
         fontHeading,
+        fontHeadingWeight,
         fontBody,
         primaryColor,
         isGradient,
@@ -71,6 +73,7 @@ export function ThemeBuilder() {
         accentColor,
         savedThemes,
         setFontHeading,
+        setFontHeadingWeight,
         setFontBody,
         setPrimaryColor: setPrimaryColorStore,
         setIsGradient,
@@ -112,12 +115,58 @@ export function ThemeBuilder() {
     const [colorMode, setColorMode] = React.useState<'contrast' | 'similar'>('contrast');
     const [lastGeneratedColor, setLastGeneratedColor] = React.useState<string | null>(null);
     const [settingsOpen, setSettingsOpen] = React.useState(false);
+    const [fonts, setFonts] = React.useState<GoogleFont[]>([]);
+    const [fontsLoading, setFontsLoading] = React.useState(true);
 
     React.useEffect(() => {
         if (typeof window !== 'undefined') {
             localStorage.setItem('theme-builder-width', width.toString());
         }
     }, [width]);
+
+    // Fetch fonts on mount
+    React.useEffect(() => {
+        fetchAllFonts()
+            .then((fetchedFonts) => {
+                setFonts(fetchedFonts);
+                setFontsLoading(false);
+            })
+            .catch((error) => {
+                console.error("Failed to load fonts:", error);
+                setFontsLoading(false);
+            });
+    }, []);
+
+    // Get available styles for the selected heading font
+    const availableStyles = React.useMemo(() => {
+        if (fontsLoading || fonts.length === 0) {
+            // Return default styles as fallback while loading
+            return [
+                { name: 'Regular', value: '400', weight: '400', italic: false, displayName: 'Regular' },
+                { name: 'Medium', value: '500', weight: '500', italic: false, displayName: 'Medium' },
+                { name: 'Bold', value: '700', weight: '700', italic: false, displayName: 'Bold' },
+            ];
+        }
+        return getAvailableStyles(fontHeading, fonts);
+    }, [fontHeading, fonts, fontsLoading]);
+
+    // Reset weight if current weight is not available for the selected font
+    React.useEffect(() => {
+        // Parse current weight (handle both "Medium" and "400" formats)
+        const currentStyle = availableStyles.find(s => 
+            s.name === fontHeadingWeight || 
+            s.value === fontHeadingWeight ||
+            s.weight === fontHeadingWeight
+        );
+        
+        if (!currentStyle && availableStyles.length > 0) {
+            // If current weight is not available, set to Medium (if available) or first available
+            const mediumStyle = availableStyles.find(s => s.weight === '500' && !s.italic);
+            const regularStyle = availableStyles.find(s => s.weight === '400' && !s.italic);
+            const defaultStyle = mediumStyle || regularStyle || availableStyles[0];
+            setFontHeadingWeight(defaultStyle.value);
+        }
+    }, [fontHeading, availableStyles, fontHeadingWeight, setFontHeadingWeight]);
 
     const handleMouseMove = (e: React.MouseEvent) => {
         if (!containerRef.current || isResizing) return;
@@ -275,6 +324,24 @@ export function ThemeBuilder() {
                                                     placeholder="Select body font..."
                                                 />
                                             </div>
+                                        </div>
+                                        <div className="space-y-2">
+                                            <Label className="text-xs">Heading Font Style</Label>
+                                            <Select value={fontHeadingWeight} onValueChange={setFontHeadingWeight}>
+                                                <SelectTrigger className="h-9">
+                                                    <SelectValue placeholder="Select style..." />
+                                                </SelectTrigger>
+                                                <SelectContent>
+                                                    {availableStyles.map((style) => (
+                                                        <SelectItem key={style.value} value={style.value}>
+                                                            {style.displayName}
+                                                        </SelectItem>
+                                                    ))}
+                                                </SelectContent>
+                                            </Select>
+                                            <p className="text-xs text-muted-foreground">
+                                                {availableStyles.length} style{availableStyles.length !== 1 ? 's' : ''} available
+                                            </p>
                                         </div>
                                     </div>
 
@@ -614,7 +681,20 @@ export function ThemeBuilder() {
                                                 {/* Default Preset Themes - Non-deletable */}
                                                 {sortedDefaultThemes.length > 0 && (
                                                     <div className="space-y-2">
-                                                        <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Preset Themes</h4>
+                                                        <div className="flex items-center justify-between">
+                                                            <h4 className="text-xs font-semibold text-muted-foreground uppercase tracking-wide">Preset Themes</h4>
+                                                            <Button
+                                                                variant="ghost"
+                                                                size="sm"
+                                                                className="h-6 px-2 text-xs"
+                                                                onClick={async () => {
+                                                                    await loadAllThemes();
+                                                                }}
+                                                                title="Refresh themes from server"
+                                                            >
+                                                                <RefreshCw className="h-3 w-3" />
+                                                            </Button>
+                                                        </div>
                                                         <div className="grid grid-cols-2 gap-2">
                                                             {sortedDefaultThemes.map((theme) => (
                                                                 <div

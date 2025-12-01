@@ -11,7 +11,7 @@ export function FeatureSection() {
         <section className="py-24 bg-muted/30">
             <div className="container mx-auto">
                 <div className="text-center max-w-3xl mx-auto mb-16">
-                    <h2 className="text-3xl md:text-4xl font-heading font-bold mb-4">
+                    <h2 className="text-3xl md:text-4xl font-heading mb-4">
                         LLMs don't have your company context
                     </h2>
                     <p className="text-lg text-muted-foreground font-body">
@@ -50,7 +50,7 @@ export function FeatureSection() {
                             <div className="inline-flex items-center justify-center p-4 rounded-full bg-muted mb-2 hover:scale-110 transition-transform duration-300 group">
                                 <Zap className="h-8 w-8 text-foreground group-hover:rotate-12 transition-transform duration-300" />
                             </div>
-                            <h3 className="text-xl font-bold font-heading">The ollo Solution</h3>
+                            <h3 className="text-xl font-heading">The ollo Solution</h3>
                             <p className="text-muted-foreground">
                                 Connected to your tools. <br />
                                 Secure by design. <br />

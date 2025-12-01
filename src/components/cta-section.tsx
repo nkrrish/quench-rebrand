@@ -115,7 +115,7 @@ export function CTASection() {
 
             <div className="container mx-auto relative z-10">
                 <div className="max-w-3xl mx-auto text-center">
-                    <h2 className="text-3xl md:text-5xl font-heading font-bold mb-6">
+                    <h2 className="text-3xl md:text-5xl font-heading mb-6">
                         Ready to transform your{" "}
                         <span
                             className={isGradient ? "bg-clip-text text-transparent" : "text-primary"}
