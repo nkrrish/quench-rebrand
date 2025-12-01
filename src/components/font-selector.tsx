@@ -418,10 +418,12 @@ export function FontSelector({ value, onValueChange, placeholder = "Select font.
                 >
                   <span className="flex-1 truncate text-left">{font.family}</span>
                   {fontErrors.has(font.family) && (
-                    <AlertCircle 
-                      className="ml-2 h-4 w-4 shrink-0 text-destructive" 
+                    <span 
+                      className="ml-2 shrink-0" 
                       title="Font failed to load - using fallback font"
-                    />
+                    >
+                      <AlertCircle className="h-4 w-4 text-destructive" />
+                    </span>
                   )}
                   {font.source && font.source !== "system" && (
                     <span className="ml-2 text-xs text-muted-foreground shrink-0 capitalize">
